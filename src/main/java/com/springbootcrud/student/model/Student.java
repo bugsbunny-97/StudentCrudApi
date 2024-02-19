@@ -25,11 +25,12 @@ public class Student {
     public Student(){
     }
 
-    public Student(String studentName, String dateOfBirth, String studentCity, String studentDepartment) {
+    public Student(String studentName, String dateOfBirth, String studentCity, String studentDepartment, Teacher teacher) {
         this.studentName = studentName;
         this.dateOfBirth = dateOfBirth;
         this.studentCity = studentCity;
         this.studentDepartment = studentDepartment;
+        this.teacher = teacher;
     }
 
     public long getStudentId() {
@@ -70,5 +71,29 @@ public class Student {
 
     public void setStudentDepartment(String studentDepartment) {
         this.studentDepartment = studentDepartment;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "teacherId")
+    private Teacher teacher;
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
+    }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "studentId=" + studentId +
+                ", studentName='" + studentName + '\'' +
+                ", dateOfBirth='" + dateOfBirth + '\'' +
+                ", studentCity='" + studentCity + '\'' +
+                ", studentDepartment='" + studentDepartment + '\'' +
+                ", teacher=" + teacher +
+                '}';
     }
 }

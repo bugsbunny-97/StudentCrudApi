@@ -16,7 +16,7 @@ public class StudentService {
 
     public Student createStudent(Student student) {
         try {
-            return studentRepository.save(new Student(student.getStudentName(), student.getDateOfBirth(), student.getStudentCity(), student.getStudentDepartment()));
+            return studentRepository.save(new Student(student.getStudentName(), student.getDateOfBirth(), student.getStudentCity(), student.getStudentDepartment(), student.getTeacher()));
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

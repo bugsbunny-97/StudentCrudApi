@@ -1,7 +1,10 @@
 package com.springbootcrud.student.studentService;
 
 import com.springbootcrud.student.model.Student;
+import com.springbootcrud.student.model.StudentDTO;
+import com.springbootcrud.student.model.Teacher;
 import com.springbootcrud.student.studentRepository.StudentRepository;
+import com.springbootcrud.student.studentRepository.TeacherRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +17,21 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public Student createStudent(Student student) {
+    @Autowired
+    TeacherRepository teacherRepository;
+
+    public String createStudent(StudentDTO studentDTO) {
         try {
-            return studentRepository.save(new Student(student.getStudentName(), student.getDateOfBirth(), student.getStudentCity(), student.getStudentDepartment(), student.getTeacher()));
+            Optional<Teacher> optionalTeacher = teacherRepository.findById(studentDTO.getTeacherId());
+            if(optionalTeacher.isPresent()) {
+                Teacher teacher = optionalTeacher.get();
+                studentRepository.save(new Student(studentDTO.getStudentName(), studentDTO.getDateOfBirth(), studentDTO.getStudentCity(),
+                        studentDTO.getStudentDepartment(), teacher));
+                return "Student created successfully";
+            }
+            else{
+                return "Teacher does not exist for this TeacherId : "+studentDTO.getTeacherId();
+            }
         } catch (Exception e) {
             throw new RuntimeException(e.getMessage());
         }

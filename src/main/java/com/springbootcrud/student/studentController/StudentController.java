@@ -1,6 +1,7 @@
 package com.springbootcrud.student.studentController;
 
 import com.springbootcrud.student.model.Student;
+import com.springbootcrud.student.model.StudentDTO;
 import com.springbootcrud.student.studentService.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,8 @@ public class StudentController {
     StudentService studentService;
 
     @PostMapping("/student")
-    public ResponseEntity<Student> createStudent(@RequestBody Student student){
-        return new ResponseEntity<>(studentService.createStudent(student), HttpStatus.CREATED);
+    public ResponseEntity<String> createStudent(@RequestBody StudentDTO studentDTO){
+        return new ResponseEntity<>(studentService.createStudent(studentDTO), HttpStatus.CREATED);
     }
 
     @PutMapping("/student/{id}")

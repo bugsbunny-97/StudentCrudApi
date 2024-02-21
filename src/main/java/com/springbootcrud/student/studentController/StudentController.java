@@ -23,25 +23,20 @@ public class StudentController {
         return new ResponseEntity<>(studentService.createStudent(studentDTO), HttpStatus.CREATED);
     }
 
-/*    @PutMapping("/student/{id}")
-    public ResponseEntity<String> updateStudent(@PathVariable long id, @RequestBody Student student){
-        return ResponseEntity.ok(studentService.updateStudent(id, student));
+    @PutMapping("/student/{id}")
+    public ResponseEntity<String> updateStudent(@PathVariable long id, @RequestBody StudentDTO studentDTO){
+        return ResponseEntity.ok(studentService.updateStudent(id, studentDTO));
     }
 
     @DeleteMapping("/student/{id}")
     public ResponseEntity<String> deleteStudent(@PathVariable long id){
         return ResponseEntity.ok(studentService.deleteStudent(id));
-    }*/
+    }
 
     @GetMapping("/student/{id}")
     public ResponseEntity<Student> getStudentById(@PathVariable long id){
         Optional<Student> student = studentService.getStudentById(id);
-        if(student.isPresent()){
-            return new ResponseEntity<>(student.get(), HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return student.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping
@@ -64,5 +59,11 @@ public class StudentController {
         else{
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/{teacherId}")
+    public ResponseEntity<List<Student>> getStudentsByTeacherId(@PathVariable long teacherId){
+        List<Student> student = studentService.getStudentsByTeacherId(teacherId);
+        return new ResponseEntity<>(student, HttpStatus.OK);
     }
 }

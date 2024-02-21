@@ -37,14 +37,20 @@ public class StudentService {
         }
     }
 
-    public String updateStudent(long id, Student student){
+    public String updateStudent(long id, StudentDTO studentDTO){
         try{
             if(studentRepository.findById(id).isPresent()){
                 Student studentExist = studentRepository.findById(id).get();
-                studentExist.setStudentName(student.getStudentName());
-                studentExist.setDateOfBirth(student.getDateOfBirth());
-                studentExist.setStudentCity(student.getStudentCity());
-                studentExist.setStudentDepartment(student.getStudentDepartment());
+                studentExist.setStudentName(studentDTO.getStudentName());
+                studentExist.setDateOfBirth(studentDTO.getDateOfBirth());
+                studentExist.setStudentCity(studentDTO.getStudentCity());
+                studentExist.setStudentDepartment(studentDTO.getStudentDepartment());
+                if(teacherRepository.findById(studentDTO.getTeacherId()).isPresent()){
+                    studentExist.setTeacher(teacherRepository.findById(studentDTO.getTeacherId()).get());
+                }
+                else{
+                    return "Teacher does not exist for this Id: "+studentDTO.getTeacherId();
+                }
                 studentRepository.save(studentExist);
                 return "Student updated successfully for: "+id;
             }
@@ -101,6 +107,14 @@ public class StudentService {
                 return List.of();
             }
         } catch (Exception e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public List<Student> getStudentsByTeacherId(long teacherId) {
+        try{
+            return studentRepository.findByTeacher_TeacherId(teacherId);
+        }catch (Exception e){
             throw new RuntimeException(e.getMessage());
         }
     }

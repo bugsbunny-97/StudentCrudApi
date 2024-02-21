@@ -22,6 +22,10 @@ public class Student {
     @Column(name = "Department")
     private String studentDepartment;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "teacherId")
+    private Teacher teacher;
+
     public Student(){
     }
 
@@ -72,10 +76,6 @@ public class Student {
     public void setStudentDepartment(String studentDepartment) {
         this.studentDepartment = studentDepartment;
     }
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "teacherId")
-    private Teacher teacher;
 
     public Teacher getTeacher() {
         return teacher;
